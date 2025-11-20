@@ -4,12 +4,16 @@ import hashlib
 import schedule
 import time
 import feedparser
+import argparse
+import sys
+import threading
 from datetime import datetime
 from typing import List, Dict
 from utils.Logger import get_logger
 
 # 初始化全局日志记录器
 log = get_logger(__name__)
+
 
 class FeedGrepProcessor:
     def __init__(self, config_path: str, db_path: str = "feedgrep.db"):
@@ -201,24 +205,43 @@ class FeedGrepProcessor:
         self.process_all_feeds()
         
         log.info(f"Scheduler started. Checking RSS feeds every {interval} minutes.")
-        log.info("Press Ctrl+C to stop.")
         
         # 持续运行调度器
-        try:
-            while True:
-                schedule.run_pending()
-                time.sleep(60)  # 每分钟检查一次是否有需要运行的任务
-        except KeyboardInterrupt:
-            log.info("\nScheduler stopped.")
+        while True:
+            schedule.run_pending()
+            time.sleep(60)  # 每分钟检查一次是否有需要运行的任务
+    
+    def start_scheduler_async(self):
+        """异步启动定时调度器"""
+        scheduler_thread = threading.Thread(target=self.start_scheduler, daemon=True)
+        scheduler_thread.start()
+        return scheduler_thread
 
 
 def main():
     """主函数"""
+    parser = argparse.ArgumentParser(description='FeedGrep - RSS聚合器')
+    parser.add_argument('--host', default='127.0.0.1', help='API服务监听地址')
+    parser.add_argument('--port', type=int, default=8000, help='API服务端口')
+    
+    args = parser.parse_args()
+    
     # 创建FeedGrep处理器实例
     processor = FeedGrepProcessor('feedgrep.yaml')
     
-    # 启动定时调度器
-    processor.start_scheduler()
+    # 异步启动定时调度器
+    scheduler_thread = processor.start_scheduler_async()
+    log.info("Scheduler started in background thread")
+    
+    # 启动API服务
+    try:
+        from api import FeedGrepAPI
+        api = FeedGrepAPI('feedgrep.yaml')
+        log.info(f"Starting API server on {args.host}:{args.port}")
+        api.run(host=args.host, port=args.port)
+    except ImportError as e:
+        log.error(f"无法导入API模块: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

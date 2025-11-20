@@ -1,0 +1,177 @@
+import yaml
+import sqlite3
+from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from typing import Dict, List, Optional
+import uvicorn
+
+
+class FeedGrepAPI:
+    def __init__(self, config_path: str, db_path: str = "feedgrep.db"):
+        """
+        初始化FeedGrep API服务
+        
+        Args:
+            config_path: 配置文件路径
+            db_path: SQLite数据库路径
+        """
+        # 加载配置文件
+        with open(config_path, 'r', encoding='utf-8') as f:
+            self.config = yaml.safe_load(f)
+        
+        self.db_path = db_path
+        self.app = FastAPI(
+            title="FeedGrep API",
+            description="RSS聚合器API服务",
+            version="1.0.0"
+        )
+        
+        # 添加CORS中间件
+        self.app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+        
+        self._setup_routes()
+    
+    def _setup_routes(self):
+        """设置API路由"""
+        self.app.get("/api/feeds", response_model=dict)(self.get_feeds)
+        self.app.get("/api/items", response_model=dict)(self.get_items)
+        self.app.get("/api/categories", response_model=dict)(self.get_categories)
+        self.app.get("/health", response_model=dict)(self.health_check)
+    
+    async def get_feeds(self):
+        """
+        获取所有RSS源和分类信息
+        
+        Returns:
+            JSON格式的所有RSS源和分类信息
+        """
+        try:
+            categories_data = self.config.get('categories', {})
+            return {
+                'success': True,
+                'data': categories_data,
+                'count': sum(len(feeds) for feeds in categories_data.values())
+            }
+        except Exception as e:
+            return JSONResponse(
+                status_code=500,
+                content={
+                    'success': False,
+                    'error': str(e)
+                }
+            )
+    
+    async def get_categories(self):
+        """
+        获取所有分类信息
+        
+        Returns:
+            JSON格式的所有分类信息
+        """
+        try:
+            categories_data = self.config.get('categories', {})
+            categories = list(categories_data.keys())
+            return {
+                'success': True,
+                'data': categories,
+                'count': len(categories)
+            }
+        except Exception as e:
+            return JSONResponse(
+                status_code=500,
+                content={
+                    'success': False,
+                    'error': str(e)
+                }
+            )
+    
+    async def get_items(
+        self,
+        category: Optional[str] = Query(None, description="按分类筛选"),
+        source: Optional[str] = Query(None, description="按来源筛选"),
+        limit: int = Query(50, ge=1, le=1000, description="返回数量限制"),
+        offset: int = Query(0, ge=0, description="偏移量")
+    ):
+        """
+        从数据库获取RSS条目，支持查询参数
+        
+        查询参数:
+            category: 分类筛选
+            source: 来源筛选
+            limit: 返回数量限制，默认50，最大1000
+            offset: 偏移量，默认0
+            
+        Returns:
+            JSON格式的RSS条目数据
+        """
+        try:
+            # 构建查询语句
+            query = "SELECT * FROM feedgrep_items WHERE 1=1"
+            params = []
+            
+            if category:
+                query += " AND category = ?"
+                params.append(category)
+            
+            if source:
+                query += " AND source_name = ?"
+                params.append(source)
+            
+            query += " ORDER BY created_at DESC LIMIT ? OFFSET ?"
+            params.extend([limit, offset])
+            
+            # 执行查询
+            conn = sqlite3.connect(self.db_path)
+            conn.row_factory = sqlite3.Row  # 使结果可以通过列名访问
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            
+            # 获取结果
+            rows = cursor.fetchall()
+            items = [dict(row) for row in rows]
+            
+            conn.close()
+            
+            return {
+                'success': True,
+                'data': items,
+                'count': len(items)
+            }
+        except Exception as e:
+            return JSONResponse(
+                status_code=500,
+                content={
+                    'success': False,
+                    'error': str(e)
+                }
+            )
+    
+    async def health_check(self):
+        """
+        健康检查接口
+        
+        Returns:
+            健康状态信息
+        """
+        return {
+            'status': 'healthy',
+            'service': 'FeedGrep API'
+        }
+    
+    def run(self, host='127.0.0.1', port=8000, **kwargs):
+        """
+        通过uvicorn启动API服务
+        
+        Args:
+            host: 监听主机地址
+            port: 监听端口
+            **kwargs: 传递给uvicorn的其他参数
+        """
+        uvicorn.run(self.app, host=host, port=port, **kwargs)
