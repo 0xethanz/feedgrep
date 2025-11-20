@@ -6,7 +6,10 @@ import time
 import feedparser
 from datetime import datetime
 from typing import List, Dict
+from utils.Logger import get_logger
 
+# 初始化全局日志记录器
+log = get_logger(__name__)
 
 class FeedGrepProcessor:
     def __init__(self, config_path: str, db_path: str = "feedgrep.db"):
@@ -82,7 +85,7 @@ class FeedGrepProcessor:
             
             return items
         except Exception as e:
-            print(f"Error fetching RSS feed from {url}: {e}")
+            log.error(f"Error fetching RSS feed from {url}: {e}")
             return []
     
     def is_item_exists(self, guid: str, link: str) -> bool:
@@ -144,13 +147,13 @@ class FeedGrepProcessor:
             conn.commit()
             conn.close()
             
-            print(f"[{category} - {source_name}] Saved new item: {item['title']}")
+            log.info(f"[{category} - {source_name}] Saved new item: {item['title']}")
             return True
         except sqlite3.IntegrityError:
             # 可能是唯一约束冲突（并发情况下）
             return False
         except Exception as e:
-            print(f"Error saving item: {e}")
+            log.error(f"Error saving item: {e}")
             return False
     
     def process_feed(self, url: str, category: str, source_name: str):
@@ -162,7 +165,7 @@ class FeedGrepProcessor:
             category: RSS源所属类别
             source_name: RSS源名称
         """
-        print(f"Processing feed: {source_name} ({url}) - Category: {category}")
+        log.info(f"Processing feed: {source_name} ({url}) - Category: {category}")
         items = self.fetch_rss_feed(url)
         
         new_items_count = 0
@@ -170,11 +173,11 @@ class FeedGrepProcessor:
             if self.save_item(item, category, source_name):
                 new_items_count += 1
         
-        print(f"Feed {source_name} processed. {new_items_count} new items saved.")
+        log.info(f"Feed {source_name} processed. {new_items_count} new items saved.")
     
     def process_all_feeds(self):
         """处理所有配置的RSS源"""
-        print("Starting to process all feeds...")
+        log.info("Starting to process all feeds...")
         
         # 处理分类的RSS源
         categories = self.config.get('categories', {})
@@ -185,7 +188,7 @@ class FeedGrepProcessor:
                 if url:
                     self.process_feed(url, category, source_name)
         
-        print("All feeds processed.")
+        log.info("All feeds processed.")
     
     def start_scheduler(self):
         """启动定时调度器"""
@@ -197,8 +200,8 @@ class FeedGrepProcessor:
         # 立即执行一次
         self.process_all_feeds()
         
-        print(f"Scheduler started. Checking RSS feeds every {interval} minutes.")
-        print("Press Ctrl+C to stop.")
+        log.info(f"Scheduler started. Checking RSS feeds every {interval} minutes.")
+        log.info("Press Ctrl+C to stop.")
         
         # 持续运行调度器
         try:
@@ -206,7 +209,7 @@ class FeedGrepProcessor:
                 schedule.run_pending()
                 time.sleep(60)  # 每分钟检查一次是否有需要运行的任务
         except KeyboardInterrupt:
-            print("\nScheduler stopped.")
+            log.info("\nScheduler stopped.")
 
 
 def main():
