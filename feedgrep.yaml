@@ -8,10 +8,10 @@ categories:
       url: https://rsshub.rssforever.com/baidu/top
     - name: 36氪
       url: https://www.36kr.com/feed
-    - name: 虎嗅
-      url: https://rss.huxiu.com/
-    - name: 凤凰网
-      url: https://rsshub.rssforever.com/ifeng/news
+#    - name: 虎嗅
+#      url: https://rss.huxiu.com/
+#    - name: 凤凰网
+#      url: https://rsshub.rssforever.com/ifeng/news
     - name: 新闻联播
       url: https://rsshub.rssforever.com/cntv/TOPC1451528971114112
     - name: 北京本地宝
@@ -72,7 +72,7 @@ categories:
       url: https://rsshub.rssforever.com/baidu/tieba/forum/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95
   
   finance:  # 金融财经
-    - name: 格隆汇
+    - name: 格隆汇-快讯
       url: https://rsshub.rssforever.com/gelonghui/live
     - name: 格隆汇-热门
       url: https://rsshub.rssforever.com/gelonghui/hot-article
@@ -88,6 +88,10 @@ categories:
       url: https://xueqiu.com/hots/topic/rss
     - name: 富途牛牛
       url: https://rsshub.rssforever.com/futunn/highlights
+    - name: 华尔街见闻-最热
+      url: https://rsshub.rssforever.com/wallstreetcn/hot
+    - name: 华尔街见闻-实时快讯
+      url: https://rsshub.umzzz.com/wallstreetcn/live
     - name: 华尔街-TG
       url: https://rsshub.rssforever.com/telegram/channel/FinanceNewsDaily
     - name: Time-TG
@@ -96,8 +100,8 @@ categories:
       url: https://rsshub.rssforever.com/telegram/channel/eco_cn
     - name: 7x24-TG
       url: https://rsshub.rssforever.com/telegram/channel/golden_wind_news
-    - name: 经济50人
-      url: https://rsshub.rssforever.com/50forum
+    - name: 知行小酒馆
+      url: https://rsshub.umzzz.com/xiaoyuzhou/podcast/6013f9f58e2f7ee375cf4216
   
   community:  # 社区论坛
     - name: V2EX-最新
@@ -106,8 +110,12 @@ categories:
       url: https://rsshub.rssforever.com/v2ex/topics/hot
     - name: Linux.do
       url: https://rsshub.rssforever.com/telegram/channel/linux_do
+    - name: LINUX DO - 最新话题
+      url: https://linuxdo.apiok.eu.org/latest.rss
     - name: NodeSeek-TG
       url: https://rsshub.rssforever.com/telegram/channel/nodeseekc
+    - name: 大佬论坛
+      url: https://www.dalao.net/feed.htm
     - name: 如有-TG
       url: https://rsshub.rssforever.com/telegram/channel/ruyoblog
     - name: 即刻-TG
@@ -128,10 +136,18 @@ categories:
   shopping:  # 购物优惠
     - name: 值得买-TG
       url: https://rsshub.umzzz.com/telegram/channel/zzzdm
-    - name: 有品上新
-      url: https://rsshub.rssforever.com/xiaomiyoupin/latest
-    - name: 有品众筹
-      url: https://rsshub.rssforever.com/xiaomiyoupin/crowdfunding
+#    - name: 有品上新
+#      url: https://rsshub.rssforever.com/xiaomiyoupin/latest
+#    - name: 有品众筹
+#      url: https://rsshub.rssforever.com/xiaomiyoupin/crowdfunding
+  社交媒体:
+    - name: 小Lin说 - YouTube
+      url: https://rsshub.umzzz.com/youtube/user/%40xiao_lin_shuo
+    - name: 知乎热榜
+      url: https://rsshub.umzzz.com/zhihu/hot
+    - name: 猫笔刀
+      url: https://wechat2rss.xlab.app/feed/33d986064f59be5263de2ca822fb3e0bdd59eb81.xml
+
 
 # 默认关键字配置
 default_keywords:
