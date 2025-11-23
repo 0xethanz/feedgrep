@@ -22,10 +22,6 @@ categories:
   tech:  # 科技数码
     - name: 阮一峰
       url: https://www.ruanyifeng.com/blog/atom.xml
-    - name: IT之家-最热
-      url: https://rsshub.rssforever.com/ithome/ranking/24h
-    - name: IT之家
-      url: https://www.ithome.com/rss
     - name: 科技圈-TG
       url: https://rsshub.umzzz.com/telegram/channel/TestFlightCN
     - name: AI新闻
@@ -34,6 +30,10 @@ categories:
       url: https://api.newshacker.me/rss
     - name: HackNews-cn
       url: https://www.supertechfans.com/cn/index.xml
+    - name: IT之家-最热
+      url: https://rsshub.rssforever.com/ithome/ranking/24h
+    - name: IT之家
+      url: https://www.ithome.com/rss
     - name: cnBeta
       url: https://rsshub.rssforever.com/cnbeta
     - name: 开源中国
