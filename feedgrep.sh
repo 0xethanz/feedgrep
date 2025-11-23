@@ -4,7 +4,7 @@
 # 用法: ./feedgrep.sh {start|stop|restart}
 
 # 定义变量
-APP_NAME="FeedGrep"
+APP_NAME="feedgrep"
 PID_FILE="/tmp/feedgrep.pid"
 LOG_FILE="/tmp/feedgrep.log"
 
