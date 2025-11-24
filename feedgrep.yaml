@@ -31,7 +31,7 @@ categories:
     - name: HackNews-cn
       url: https://www.supertechfans.com/cn/index.xml
     - name: IT之家-最热
-      url: https://rsshub.rssforever.com/ithome/ranking/24h
+      url: https://rsshub.umzzz.com/ithome/ranking/24h
     - name: IT之家
       url: https://www.ithome.com/rss
     - name: cnBeta
@@ -54,17 +54,17 @@ categories:
       url: https://rsshub.rssforever.com/coolapk/toutiao
 
   pm&dev:  # 产品研发
-    - name: 产品运营
+    - name: 人人都是产品经理-产品运营
       url: https://www.woshipm.com/category/operate/feed
-    - name: 产品经理
+    - name: 人人都是产品经理-热门
       url: https://rsshub.rssforever.com/woshipm/popular
-    - name: 掘金
+    - name: 掘金本周最热
       url: https://rsshub.rssforever.com/juejin/trending/all/weekly
     - name: 博客园
       url: https://rsshub.rssforever.com/cnblogs/aggsite/topdiggs
     - name: InfoQ
       url: https://rsshub.rssforever.com/infoq/recommend
-    - name: 互联网-TG
+    - name: 互联网从业者充电站-TG
       url: https://rsshub.rssforever.com/telegram/channel/https1024
     - name: TesterHome
       url: https://testerhome.com/topics/feed
@@ -82,24 +82,24 @@ categories:
       url: https://rsshub.rss.zgdnz.cc/cls/hot
     - name: 同花顺
       url: https://rsshub.rssforever.com/10jqka/realtimenews
-    - name: 第一财经
+    - name: 第一财经-头条
       url: https://rsshub.rssforever.com/yicai/headline
-    - name: 雪球
+    - name: 雪球-今日话题
       url: https://xueqiu.com/hots/topic/rss
-    - name: 富途牛牛
+    - name: 富途牛牛-头条
       url: https://rsshub.rssforever.com/futunn/highlights
     - name: 华尔街见闻-最热
       url: https://rsshub.rssforever.com/wallstreetcn/hot
     - name: 华尔街见闻-实时快讯
       url: https://rsshub.umzzz.com/wallstreetcn/live
-    - name: 华尔街-TG
-      url: https://rsshub.rssforever.com/telegram/channel/FinanceNewsDaily
-    - name: Time-TG
-      url: https://rsshub.rssforever.com/telegram/channel/TimeHorizonX
-    - name: 经济-tg
+#    - name: 华尔街-TG
+#      url: https://rsshub.rssforever.com/telegram/channel/FinanceNewsDaily
+    - name: Time经济观察-TG
+      url: https://rsshub.umzzz.com/telegram/channel/TimeHorizonX
+    - name: 经济信息联播-tg
       url: https://rsshub.rssforever.com/telegram/channel/eco_cn
     - name: 7x24-TG
-      url: https://rsshub.rssforever.com/telegram/channel/golden_wind_news
+      url: https://rsshub.umzzz.com/telegram/channel/eco_cn
     - name: 知行小酒馆
       url: https://rsshub.umzzz.com/xiaoyuzhou/podcast/6013f9f58e2f7ee375cf4216
   
@@ -116,25 +116,25 @@ categories:
       url: https://rsshub.rssforever.com/telegram/channel/nodeseekc
     - name: 大佬论坛
       url: https://www.dalao.net/feed.htm
-    - name: 如有-TG
+    - name: 如有乐享-TG
       url: https://rsshub.rssforever.com/telegram/channel/ruyoblog
-    - name: 即刻-TG
+    - name: 即刻精选-TG
       url: https://rsshub.rssforever.com/telegram/channel/jike_collection
     - name: 得到-TG
       url: https://rsshub.rssforever.com/telegram/channel/dedao2019
-    - name: 内幕-TG
+    - name: 你不知道的内幕消息-TG
       url: https://rsshub.rssforever.com/telegram/channel/inside1024
-    - name: A姐-TG
+    - name: A姐分享-TG
       url: https://rsshub.rssforever.com/telegram/channel/abskoop
-    - name: Lins-TG
+    - name: Lin's 文字世界-TG
       url: https://rsshub.rssforever.com/telegram/channel/LinsBookA
-    - name: V2ray-TG
+    - name: V2rayShare-TG
       url: https://rsshub.rssforever.com/v2rayshare
     - name: RSSHub-TG
       url: https://rsshub.rssforever.com/telegram/channel/awesomeRSSHub
   
   shopping:  # 购物优惠
-    - name: 值得买-TG
+    - name: 真正值得买-TG
       url: https://rsshub.umzzz.com/telegram/channel/zzzdm
 #    - name: 有品上新
 #      url: https://rsshub.rssforever.com/xiaomiyoupin/latest
@@ -145,7 +145,7 @@ categories:
       url: https://rsshub.umzzz.com/youtube/user/%40xiao_lin_shuo
     - name: 知乎热榜
       url: https://rsshub.umzzz.com/zhihu/hot
-    - name: 猫笔刀
+    - name: 猫笔刀 - 公众号
       url: https://wechat2rss.xlab.app/feed/33d986064f59be5263de2ca822fb3e0bdd59eb81.xml
 
 
