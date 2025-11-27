@@ -153,11 +153,6 @@ categories:
       url: https://rsshub.umzzz.com/telegram/channel/zzzdm
     - name: RackNerd官方促销信息️-TG
       url: https://rsshub.umzzz.com/telegram/channel/racknerd_promo
-      push_channels:
-        - webhook_feishu
-        - webhook_weixin
-        - qywx-bot-test
-        - telegram-bot
 #    - name: 有品上新
 #      url: https://rsshub.rssforever.com/xiaomiyoupin/latest
 #    - name: 有品众筹
@@ -186,18 +181,8 @@ default_keywords:
       - qywx-bot-test
       - telegram-bot
   - keywords: 恒生科技 恒生
-    push_channels:
-      - webhook_feishu
-      - webhook_weixin
-      - qywx-bot-test
-      - telegram-bot
   - keywords: ETF
   - keywords: 比特币 以太坊
-    push_channels:
-      - webhook_feishu
-      - webhook_weixin
-      - qywx-bot-test
-      - telegram-bot
   - keywords: 黄金 白银
   - keywords: qwen 千问 通义千问 阿里
   - keywords: 字节 bytedance 豆包
@@ -217,7 +202,7 @@ interval_minutes: 30
 # 推送配置
 push:
   # 推送总开关
-  enabled: true
+  enabled: false
   
   # 推送时间范围控制开关
   time_restriction_enabled: true
@@ -231,22 +216,33 @@ push:
     # 飞书群
     webhook_feishu:
       type: feishu
-      url: https://open.feishu.cn/open-apis/bot/v2/hook/824c268a-fb75-4f48-a0be-3bea0d8af708
+      url: https://open.feishu.cn/open-apis/bot/v2/hook/xxxxx-xx-xx-xx-xxx
     
     # 个人微信
     webhook_weixin:
       type: wework
       wework_msg_type: text
-      url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=cbbad3eb-971a-4b9e-acfb-7838e8d748ac
+      url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxxx-xx-xx-xx-xxx
 
     # 企业微信群
     qywx-bot-test:
       type: wework
       wework_msg_type: markdown
-      url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=8d2d04fc-aa85-4bec-b5c8-b68529d4e99a
+      url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxxx-xx-xx-xx-xxx
 
     # Telegram
     telegram-bot:
       type: telegram
-      bot_token: 8255169196:AAFK-QOQG37jlbbyPf5USJbrnFxbiIBpxMc
-      chat_id: 701992422
+      bot_token: YOUR_BOT_TOKEN
+      chat_id: YOUR_CHAT_ID
+    # 邮件推送
+    email_notices:
+      type: email
+      smtp_server: smtp.example.com
+      smtp_port: 587
+      username: your_username
+      password: your_password
+      sender: sender@example.com
+      receivers:
+        - receiver1@example.com
+        - receiver2@example.com
