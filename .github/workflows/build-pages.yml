@@ -10,7 +10,7 @@ on:
       - main
     paths:
       - '.github/workflows/build-pages.yml'
-      - 'github-actions-deploy/build_static_pages.py'
+      - 'build_static_pages.py'
 
 jobs:
   build-and-deploy:
@@ -38,7 +38,7 @@ jobs:
       
       - name: 🔨 构建静态页面
         run: |
-          python github-actions-deploy/build_static_pages.py \
+          python build_static_pages.py \
             --token ${{ secrets.GH_TOKEN }} \
             --owner ${{ github.repository_owner }} \
             --repo ${{ github.event.repository.name }} \

@@ -41,7 +41,7 @@ jobs:
       
       - name: 🚀 处理RSS源
         run: |
-          python github-actions-deploy/fetch_feeds_github.py \
+          python fetch_feeds_github.py \
             --config feedgrep.yaml \
             --token ${{ secrets.GH_TOKEN }} \
             --owner ${{ github.repository_owner }} \
