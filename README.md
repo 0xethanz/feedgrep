@@ -1,229 +1,232 @@
-# FeedGrep - 让重要信息主动找到你 💫
+# FeedGrep GitHub Actions + GitHub Pages 部署方案
 
-FeedGrep 是一款专注于 RSS 信息捕获、精准筛选和多渠道推送 的轻量级阅读器。
-FeedGrep 支持多源 RSS 抓取、自定义筛选规则、多渠道推送和轻量级 Web UI，让你以最低成本构建自己的信息获取系统。
+这是FeedGrep的完全免费部署方案，使用：
+- **GitHub Actions** 定时处理RSS任务
+- **GitHub Pages** 托管前端网站
+- **GitHub Issues** 存储数据（通过标签和标题组织）
 
-## 功能特点
+## 完全免费的优势
 
-### 📡 多源订阅
-- RSS 源订阅 - 支持主流 RSS 格式
-- 灵活定时策略 - 自定义抓取间隔频率
+✅ **0成本** - 完全免费，无限制  
+✅ **自动化** - GitHub Actions定时任务自动运行  
+✅ **无需服务器** - 无需支付任何主机费用  
+✅ **简单部署** - 只需推送代码到GitHub  
 
-### 🔍 自定义监控筛选
-FeedGrep 提供三种关键词规则类型，可组合使用以实现精确过滤：
+## 架构设计
 
-| 类型   | 描述                     | 示例                   |
-|--------|------------------------|----------------------|
-| 普通词 | 任意词命中即匹配               | 苹果 手机 |
-| 必须词 | 必须全部出现，使用 +前缀（注意中间无空格） | +苹果 +发布会             |
-| 排除词 | 出现即过滤，使用 -前缀（注意中间无空格）           | 苹果 -果汁               |
-
-综合示例：
-
-`苹果 华为 +手机 -水果 -价格
-`
-
-意为：
-命中“苹果”或“华为”，并必须包含“手机”，排除包含“水果”和“价格”的内容。
-
-### 🚀典型应用场景
-| 用户角色 | 监控示例            |
-|------|-----------------|
-| 开发者  | 开源库更新、技术博客、漏洞通告 |
-| 购物达人 | 商品降价、限时优惠、新品上市  |
-| 市场人员 | 品牌舆情、竞品动态、行业趋势  |
-| 普通用户 | 热点新闻、新闻动态、新闻快讯      |
-| 投资人员 | 财经新闻、股票行情、行业动态  |
-
-### 🤖 多渠道推送
-- 飞书 - 群机器人推送
-- 企业微信 - 群机器人
-- 微信 - 利用企微-微信插件通道
-- Telegram - Bot 消息推送
-- 邮件 - SMTP 邮件通知
-
-### ⚙️ 灵活配置
-- rss源管理 - 不限制个数、自由配置
-- 关键词匹配规则 - 支持普通词、必须词、排除词
-- 推送路由 - 单个rss源或者关键词可配置多个推送渠道
-- 消息合并 - 同源同关键词信息合并推送
-- 总开关控制 - 全局推送启用/禁用
-
+```
+┌─────────────────┐
+│ GitHub Actions  │ ← 定时触发 (每30分钟)
+│  RSS处理任务    │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ GitHub Issues   │ ← 存储 RSS 数据
+│  (数据库)       │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ GitHub Pages    │ ← 前端展示
+│   (网站)        │
+└─────────────────┘
+```
 
 ## 快速开始
-### 安装依赖
+
+### 1. 项目准备
 
 ```bash
-pip install -r requirements.txt
+# 1. Fork 或新建仓库
+# 2. 克隆到本地
+git clone https://github.com/YOUR_USERNAME/feedgrep.git
+cd feedgrep
+
+# 3. 复制部署文件到根目录
+cp -r github-actions-deploy/* .
+
+# 4. 推送到GitHub
+git add .
+git commit -m "feat: 添加 GitHub Actions 部署方案"
+git push origin main
 ```
 
-### 配置
+### 2. 配置GitHub
 
-修改 `feedgrep.yaml` 文件来设置RSS源、检查间隔、关键词匹配规则、推送渠道。
+#### 2.1 启用GitHub Pages
+1. 进入仓库 Settings
+2. 找到 "Pages" 部分
+3. 在 "Build and deployment" 中，选择：
+   - Source: `GitHub Actions`
 
-### 运行
+#### 2.2 创建个人访问令牌 (PAT)
+1. 进入 [GitHub Personal Access Tokens](https://github.com/settings/tokens)
+2. 点击 "Generate new token"
+3. 选择 "Generate new token (classic)"
+4. 权限选择：
+   - ✅ `repo` (完全控制私有仓库和公共仓库)
+   - ✅ `workflow` (更新GitHub Action工作流)
+   - ✅ `issues` (创建和编辑issues)
+   - ✅ `pages` (部署到GitHub Pages)
+5. 复制令牌值
 
-运行以下命令启动FeedGrep处理器：
+#### 2.3 添加Secrets
+1. 进入仓库 Settings → Secrets and variables → Actions
+2. 点击 "New repository secret"
+3. 添加以下Secrets：
+
+| Secret名称 | 值 | 说明 |
+|-----------|-------|------|
+| `GH_TOKEN` | 上面复制的PAT | GitHub操作令牌 |
+| `GITHUB_REPO_OWNER` | 你的GitHub用户名 | 仓库所有者 |
+| `GITHUB_REPO_NAME` | `feedgrep` | 仓库名称 |
+
+### 3. 配置feedgrep.yaml
+
+编辑根目录的 `feedgrep.yaml` 文件，配置：
+- RSS源（可选）
+- 关键词规则（可选）
+- 推送渠道（可选）
+
+在GitHub Actions环境下，**不支持外部推送**（飞书、企业微信等），所有数据将通过GitHub Issues存储。
+
+### 4. 部署
 
 ```bash
-python feedgrep.py
+# 将所有文件推送到GitHub
+git add .
+git commit -m "初始化部署"
+git push origin main
 ```
 
-程序会立即检查所有RSS源，然后按照设定的时间间隔定期检查。
+GitHub Actions会自动：
+1. ✅ 每天凌晨2点检查RSS源（UTC时间）
+2. ✅ 更新GitHub Issues中的数据
+3. ✅ 生成静态网页
+4. ✅ 部署到GitHub Pages
 
-启动后可以通过浏览器访问 `http://localhost:8000` 查看Web界面。
+## 工作流文件说明
 
-#### Bash 脚本方式 (推荐)
+### `.github/workflows/rss-feed.yml`
+- 定时触发（每天UTC 2点）
+- 处理所有RSS源
+- 将新项目发送到GitHub Issues
 
-项目提供了一个统一的 Bash 脚本来管理服务：
+### `.github/workflows/build-pages.yml`
+- 在RSS数据更新后自动触发
+- 从GitHub Issues读取数据
+- 生成静态HTML页面
+- 部署到GitHub Pages
+
+## API端点 (静态生成)
+
+部署后，你可以访问以下端点获取JSON数据：
+
+```
+https://YOUR_GITHUB_USERNAME.github.io/feedgrep/api/feeds.json
+https://YOUR_GITHUB_USERNAME.github.io/feedgrep/api/items.json?category=tech
+https://YOUR_GITHUB_USERNAME.github.io/feedgrep/api/categories.json
+```
+
+## 前端配置
+
+编辑 `index.html` 中的API基URL：
+
+```javascript
+// 修改第500行左右
+const API_BASE_URL = 'https://YOUR_GITHUB_USERNAME.github.io/feedgrep';
+```
+
+## 限制和考虑
+
+| 限制项 | 值 | 说明 |
+|-------|-----|------|
+| 并发任务 | 20个 | GitHub Actions免费额度 |
+| 月度分钟数 | 2000分钟 | 免费账户 |
+| 工作流频率 | 建议1-3小时 | 避免超限 |
+| Issues存储 | 无限制 | 适合小数据量 |
+| 页面部署 | 1GB | 足够使用 |
+
+## 迁移原有数据
+
+如果有SQLite数据库，可以使用迁移工具：
 
 ```bash
-# 启动服务
-./feedgrep.sh start
-
-# 停止服务
-./feedgrep.sh stop
-
-# 重启服务
-./feedgrep.sh restart
+python scripts/migrate_to_github_issues.py \
+  --db feedgrep.db \
+  --token YOUR_GITHUB_TOKEN \
+  --repo YOUR_USERNAME/feedgrep
 ```
 
-## 本地数据存储
+## 常见问题
 
-RSS条目被存储在本地的SQLite数据库 `feedgrep.db` 中，每条记录都会标记其所属的分类和来源名称。
+### Q: 如何增加检查频率？
+编辑 `.github/workflows/rss-feed.yml` 中的 `schedule` 部分。
 
-## 高级关键词搜索语法
+### Q: 如何添加新的推送渠道？
+由于是无服务器架构，推送渠道受限。建议使用GitHub Issues订阅或Email通知。
 
-FeedGrep支持三种关键词类型，可以通过组合使用实现精确的内容筛选：
+### Q: 数据安全吗？
+- ✅ 如果仓库是私有的，数据完全私有
+- ✅ GitHub Issues内容经过加密传输
+- ✅ 建议敏感信息不公开仓库
 
-1. **普通词**：包含其中任意一个词就会被捕获，多个关键词使用空格分隔
-   - 示例：`苹果 华为` 表示包含"苹果"或"华为"的内容
+### Q: 如何本地测试？
 
-2. **必须词**：必须同时包含普通词和必须词才会被捕获，使用`+`前缀标识
-   - 示例：`苹果 +手机` 表示包含"苹果"且必须包含"手机"的内容
+```bash
+# 安装依赖
+pip install -r requirements-github-actions.txt
 
-3. **排除词**：包含过滤词的新闻会被直接排除，即使包含其他关键词，使用`-`前缀标识
-   - 示例：`苹果 -水果` 表示包含"苹果"但排除包含"水果"的内容
+# 运行RSS处理脚本
+python scripts/fetch_feeds_github.py --config feedgrep.yaml --token YOUR_GITHUB_TOKEN
 
-完整示例：`苹果 华为 +手机 -水果 -价格` 表示搜索包含"苹果"或"华为"，同时必须包含"手机"，但排除包含"水果"或"价格"的内容。
-
-## 自定义关键词快捷搜索
-
-在Web界面左侧边栏中提供了默认关键词的快捷按钮，点击即可快速进行相关搜索。为了保持界面美观，按钮上仅显示关键词组的第一个词，鼠标悬停时会显示完整的关键词配置。
-
-## 推送功能
-
-FeedGrep支持将新的RSS条目推送到多种渠道：
-
-### 支持的推送渠道
-
-1. 飞书群机器人
-2. 企业微信群机器人
-3. 个人微信（基于企业微信应用，在企微后台-微信插件，微信扫码关注，推送到个人微信）
-3. 邮件
-4. Telegram
-
-## 项目结构
-
-```.
-├── feedgrep.py           # 主程序入口
-├── feedgrep.yaml         # 配置文件
-├── feedgrep.db           # SQLite 本地数据
-├── feedgrep.sh           # bash启动脚本
-├── index.html            # Web UI
-├── api.py                # API模块
-├── push.py               # 推送模块
-└── utils/                # 日志模块
-├── requirements.txt      # 依赖包
+# 生成静态页面
+python scripts/build_static_pages.py
 ```
 
+## 高级配置
 
-## 配置详解
-
-在配置文件中添加 `push` 部分来启用推送功能：
-
-```
-push:
-  # 推送总开关
-  enabled: true
-  
-  # 推送时间范围控制开关
-  time_restriction_enabled: true
-  
-  # 推送时间范围（24小时制，北京时间）
-  time_start: "08:00"  # 早上8点
-  time_end: "22:00"    # 晚上10点
-  
-  # 推送渠道配置
-  webhooks:
-    # 飞书资讯群
-    webhook_feishu:
-      type: feishu
-      url: https://open.feishu.cn/open-apis/bot/v2/hook/XXXXXXXXXXXXXXXXXX
-    
-    # 企业微信群机器人
-    webhook_qyweixin:
-      type: wework
-      wework_msg_type: text  # 可选:text, markdown
-      url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=XXXXXXXXXXXXXXXXXX
-    
-    # 个人微信
-    webhook_weixin:
-      type: wework
-      wework_msg_type: text  # 只可选:text，需要在企微后台扫码关注“微信插件”，其他配置和上述企微机器人一样
-      url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=XXXXXXXXXXXXXXXXXX
-      
-    # 邮件推送
-    email_notices:
-      type: email
-      smtp_server: smtp.example.com
-      smtp_port: 587
-      username: your_username
-      password: your_password
-      sender: sender@example.com
-      receivers:
-        - receiver1@example.com
-        - receiver2@example.com
-        
-    # Telegram推送
-    telegram_channel:
-      type: telegram
-      bot_token: YOUR_BOT_TOKEN
-      chat_id: YOUR_CHAT_ID
+### 自定义检查时间
+编辑 `.github/workflows/rss-feed.yml`:
+```yaml
+schedule:
+  - cron: '0 2 * * *'  # 每天UTC 2:00 (北京时间 10:00)
 ```
 
-推送时间范围控制功能允许您设置推送消息的有效时间窗口。**时间范围始终按照北京时间进行计算**，无论服务部署在哪个时区。默认情况下，只在早上8点到晚上10点之间推送消息。您可以通过以下配置项控制此功能：
-
-- `time_restriction_enabled`: 是否启用时间范围控制，默认为false
-- `time_start`: 推送开始时间（24小时制，北京时间），默认为"08:00"
-- `time_end`: 推送结束时间（24小时制，北京时间），默认为"22:00"
-
-### 为RSS源配置推送渠道
-
-在每个RSS源配置中添加 `push_channels` 列表来指定该源使用哪些推送渠道：
-
-```
-categories:
-  news:
-    - name: 阮一峰的网络日志
-      url: https://www.ruanyifeng.com/blog/atom.xml
-      push_channels:
-        - webhook_feishu
-        - webhook_weixin
+### 增加并发处理
+编辑 `.github/workflows/rss-feed.yml`:
+```yaml
+jobs:
+  rss-feed:
+    strategy:
+      matrix:
+        category: [news, tech, finance]
 ```
 
-当该RSS源有新内容时，将会推送到指定的渠道。
+## 成本对比
 
-### 为关键词配置推送渠道
+| 部署方案 | 月度成本 | 维护难度 |
+|--------|---------|--------|
+| **GitHub Actions + Pages** | **$0** | ⭐ 简单 |
+| Railway | $5+ | ⭐⭐ 中等 |
+| Vercel | $0-20+ | ⭐⭐ 中等 |
+| 自建服务器 | $5+ | ⭐⭐⭐ 复杂 |
+| AWS/Azure | $10+ | ⭐⭐⭐⭐ 很复杂 |
 
-在关键词配置中添加 `push_channels` 列表来指定匹配该关键词的内容推送到哪些渠道：
+## 下一步
 
-```
-default_keywords:
-  - keywords: AI 人工智能 +模型 -air -gai -mail
-    push_channels:
-      - webhook_feishu
-  - 纳斯达克 标普 道琼斯
-```
+- [ ] 配置GitHub Secrets
+- [ ] 启用GitHub Pages
+- [ ] 推送代码触发首次运行
+- [ ] 访问 GitHub Pages URL 查看结果
+- [ ] 自定义 feedgrep.yaml
+- [ ] 配置发送通知
 
-当有新内容匹配关键词时，将会推送到指定的渠道。关键词推送只会推送最近一次RSS获取到的新内容。
+## 支持
+
+遇到问题？查看：
+1. [GitHub Actions文档](https://docs.github.com/en/actions)
+2. [GitHub Pages文档](https://docs.github.com/en/pages)
+3. [项目Issues](https://github.com/0xethanz/feedgrep/issues)
+
